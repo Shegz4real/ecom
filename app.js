@@ -1,14 +1,32 @@
 const express = require('express');
-const connectDB = require(`./models/connect_db`);
+const session = require(`express-session`)
 const dotenv = require("dotenv");
 const bodyParser = require('body-parser');
 const { default: mongoose } = require('mongoose');
 
+const connectDB = require(`./models/connect_db`);
+const user = require(`./routes/user_route`);
+const login = require(`./routes/login_route`);
+const signup = require(`./routes/signup_route`);
+
 const app = express()
 dotenv.config(); 
 
-app.use(bodyParser.json)
+app.use(bodyParser.json());
+app.use(session({
 
+    resave:`true`,
+    secret:process.env.SESSION_SEC,
+    saveUninitialized:`true`,
+    cookie:{
+        sameSite: "strict"
+    }
+}));
+
+//route middlewares
+app.use('/user', user);
+app.use(`/login`, login);
+app.use(`/signup`, signup);
 
 app.get('',(req, res)=>{
     res.send(`landing page`);
@@ -22,7 +40,3 @@ mongoose.connection.once(`open`, ()=>{
     });
 });
 
-/*INCLUDE {
-    "start":"nodemon app.js" ............ in paclage.json
-}
-*/
