@@ -8,6 +8,7 @@ const connectDB = require(`./models/connect_db`);
 const user = require(`./routes/user_route`);
 const login = require(`./routes/login_route`);
 const signup = require(`./routes/signup_route`);
+const logout = require(`./routes/logout_route`)
 
 const app = express()
 dotenv.config(); 
@@ -27,6 +28,7 @@ app.use(session({
 app.use('/user', user);
 app.use(`/login`, login);
 app.use(`/signup`, signup);
+app.use(`/logout`, logout);
 
 app.get('',(req, res)=>{
     res.send(`landing page`);
