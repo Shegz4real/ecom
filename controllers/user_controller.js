@@ -24,7 +24,7 @@ exports.createUser = async (req, res)=>{
     try{
 
         const user = new User(req.body);
-        user.password = hash.hashPassword(req.body.password);
+        user.password = hashPassword(req.body.password);
         await user.save();
 
         req.session.user = user;
@@ -78,15 +78,57 @@ exports.loginUser = async (req, res)=>{
 //@desc ..... user can change password
 //@route ..... /user/:id/
 
-exports.changeUserPassword = async(req, res)=>{
+exports.editUserInfo = async(req, res)=>{
     try{
-
-        password && hashPassword(password);
+        if(req.body.password) { req.body.password = hashPassword(req.body.password)};
+        console.log(req.body.password);
         const updatedUser = await User.findByIdAndUpdate(req.params.id, {
             $set:req.body 
         }, {new:true}
         );
-        res.status(200).json(updatedUser);
-    }catch(err){console.log(err);}
+        res.status(200).json(updatedUser); 
+    }catch(err){res.status(500).json(err)}
 
-}  
+} 
+
+//@desc .... admin delete user
+//@route .... admin/users/:id
+
+exports.deleteUser = async(req, res)=>{
+    try{
+        await User.findByIdAndDelete(req.params.id);
+        res.status(200).json('user has been deleted');
+    }catch(err){
+        res.status(500).json(err);
+    }
+}
+
+//@desc ....find users on admin dashboard
+//@route  .... admin/users
+
+exports.getUsers = async(req, res)=>{
+    try{
+        const user = await User.find();
+        res.send({data:user});
+
+    }catch(err){
+        res.status(500).json(err);
+    }
+}
+
+//@desc ... find a user based on username
+//@route .... /admin/user/:id
+exports.getUserInfo = async(req, res)=>{
+
+    try{
+
+        const user = await User.findById(req.params.id);
+        const { password:password, ...others } = user._doc;
+        console.log(password);
+        res.status(200).json(...others, accessToken);
+
+    }catch(err){
+        res.status(500).json(err)
+    }
+    
+}

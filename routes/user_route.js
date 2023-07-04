@@ -1,6 +1,6 @@
 const express = require(`express`);
 const router = express.Router();
-const {verifyToken, verifyTokenANdAUthorization} = require('../controllers/verifyToken');
+const {verifyTokenAndAdmin, verifyTokenANdAUthorization} = require('../controllers/verifyToken');
 const userController  = require('../controllers/user_controller');
 
 router.get('/', (req, res)=>{
@@ -13,7 +13,8 @@ router.post('/', (req, res)=>{
     res.send('this shit is working');
 });
 
-router.put('/:id', verifyTokenANdAUthorization, userController.editUserInfo)
+router.put('/:id', verifyTokenANdAUthorization, userController.editUserInfo);
+
 
 
 module.exports = router;
