@@ -22,7 +22,7 @@ async function userExist(email){
 exports.createUser = async (req, res)=>{
 
     try{
-
+       
         const user = new User(req.body);
         user.password = hashPassword(req.body.password);
         await user.save();
@@ -63,7 +63,8 @@ exports.loginUser = async (req, res)=>{
         req.session.authorized = true;
 
         const accessToken = jwt.sign({
-            id:user._id, isAdmin:user.isAdmin
+            id:user._id, 
+            isAdmin:user.isAdmin
         }, process.env.JWT_SEC, 
         {expiresIn:'3d'}
         );
@@ -125,7 +126,7 @@ exports.getUserInfo = async(req, res)=>{
         const user = await User.findById(req.params.id);
         const { password:password, ...others } = user._doc;
         console.log(password);
-        res.status(200).json(...others, accessToken);
+        res.status(200).json(others);
 
     }catch(err){
         res.status(500).json(err)
