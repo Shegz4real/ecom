@@ -30,9 +30,8 @@ exports.createUser = async (req, res)=>{
         req.session.user = user;
         req.session.authorized = true;
 
-        const accessToken = jwt.sign({
-            id:user._id, isAdmin:user.isAdmin
-        }, process.env.JWT_SEC, 
+        const payload_user = {id:user._id, isAdmin:user.isAdmin}
+        const accessToken = jwt.sign(payload_user , process.env.JWT_SEC, 
         {expiresIn:'3d'}
         );
 
@@ -82,7 +81,6 @@ exports.loginUser = async (req, res)=>{
 exports.editUserInfo = async(req, res)=>{
     try{
         if(req.body.password) { req.body.password = hashPassword(req.body.password)};
-        console.log(req.body.password);
         const updatedUser = await User.findByIdAndUpdate(req.params.id, {
             $set:req.body 
         }, {new:true}
@@ -108,8 +106,12 @@ exports.deleteUser = async(req, res)=>{
 //@route  .... admin/users
 
 exports.getUsers = async(req, res)=>{
+    // to get the lates 5 users
+    const query = req.query.new;
     try{
-        const user = await User.find();
+        const user = query 
+        ? await User.find().sort({_id:-1}).limit(1) 
+        : await User.find();
         res.send({data:user});
 
     }catch(err){
@@ -132,4 +134,36 @@ exports.getUserInfo = async(req, res)=>{
         res.status(500).json(err)
     }
     
+}
+
+//@route ..... admin/users/stats
+//@desc ...get stats about users.
+
+exports.usersStats = async (req, res)=>{
+
+    const date = new Date();
+    console.log(date)
+    const last_year = new Date(date.setFullYear(date.getFullYear() - 1));
+    
+
+    try{
+
+        const data = await User.aggregate([
+            {$match: {createdAt: {$gte:last_year } } },
+            {
+                $project: {
+                    month: {$month: "$createdAt"}
+                }
+            },{
+                $group:{
+                    _id:"$month",
+                    total:{ $sum: 1 } 
+                }
+            }
+        ]);
+        res.status(200).json(data); 
+
+    } catch(err){
+        res.status(500).json(err)
+    }
 }
