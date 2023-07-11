@@ -14,6 +14,6 @@ router.delete('/users/:id', verifyTokenAndAdmin, deleteUser);
 
 //product operation routes
 
-router.get('/', )
+
 
 module.exports = router;
