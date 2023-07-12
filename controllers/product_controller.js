@@ -22,6 +22,9 @@ exports.createProduct = async (req, res)=>{
 //@route ..... /products
 exports.getProducts = async (req, res)=>{
 
+    const qNew = req.query.new;
+    const qCategory = req.query.category;
+
     try{
 
         const products = await Products.find()
