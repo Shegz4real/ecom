@@ -42,6 +42,8 @@ const verifyTokenAndAdmin = (req, res, next)=>{
         console.log(req.user.isAdmin)
         if(req.user.isAdmin){
             next()
+        }else if(req.user.isAdmin == null) {
+            res.status(403).json("login")
         }else {
             res.status(403).json('you are not authorized to do that!');
         }
