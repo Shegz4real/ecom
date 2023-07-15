@@ -11,6 +11,7 @@ const signup = require(`./routes/signup_route`);
 const logout = require(`./routes/logout_route`);
 const admin = require('./routes/admin_route');
 const products = require('./routes/product_route');
+const cart = require('./routes/cart_route');
 
 const app = express()
 dotenv.config(); 
@@ -33,6 +34,7 @@ app.use(`/signup`, signup);
 app.use(`/logout`, logout);
 app.use('/admin', admin );
 app.use('/products/', products);
+app.use('/cart', cart);
 
 app.get('',(req, res)=>{
     res.send(`landing page`);
