@@ -7,7 +7,7 @@ const verifyToken = (req, res, next)=>{
     if(authHeader){
 
         const token = authHeader.split(" ")[1] //split the header into two parts seperated by a space and pick the second item in the array
-        console.log(token);
+         
         jwt.verify(token, process.env.JWT_SEC, (err, user)=>{
 
             if(err){ 
@@ -23,6 +23,7 @@ const verifyToken = (req, res, next)=>{
     }
 }
 
+//check if user is verified for carrying out operation
 const verifyTokenANdAUthorization = (req, res, next)=>{
 
     verifyToken(req, res, ()=>{
@@ -49,5 +50,6 @@ const verifyTokenAndAdmin = (req, res, next)=>{
         }
     });
 }
+
 
 module.exports = {verifyToken, verifyTokenANdAUthorization, verifyTokenAndAdmin };

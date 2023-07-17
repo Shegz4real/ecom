@@ -58,8 +58,6 @@ exports.loginUser = async (req, res)=>{
         !isValidPassword && res.status(401).json(`wrong password`);
 
         const {password, ...others} = user._doc;
-        req.session.user = user;
-        req.session.authorized = true;
 
         const accessToken = jwt.sign({
             id:user._id, 
@@ -67,7 +65,7 @@ exports.loginUser = async (req, res)=>{
         }, process.env.JWT_SEC, 
         {expiresIn:'3d'}
         );
-
+        console.log(accessToken);
         res.status(200).json({...others, accessToken});
    
     }catch(e){ 
@@ -106,13 +104,13 @@ exports.deleteUser = async(req, res)=>{
 //@route  .... admin/users
 
 exports.getUsers = async(req, res)=>{
-    // to get the lates 5 users
+    // to get the latest 5 users
     const query = req.query.new;
     try{
         const user = query 
         ? await User.find().sort({_id:-1}).limit(1) 
         : await User.find();
-        res.send({data:user});
+        res.status(200).send({data:user});
 
     }catch(err){
         res.status(500).json(err);
@@ -120,15 +118,16 @@ exports.getUsers = async(req, res)=>{
 }
 
 //@desc ... find a user based on username
-//@route .... /admin/user/:id
+//@route .... /admin/user/:id, /user/:id
+
 exports.getUserInfo = async(req, res)=>{
 
     try{
 
         const user = await User.findById(req.params.id);
         const { password:password, ...others } = user._doc;
-        console.log(password);
-        res.status(200).json(others);
+        console.log(...others);
+        res.status(200).json({...others});
 
     }catch(err){
         res.status(500).json(err)

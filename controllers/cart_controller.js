@@ -63,3 +63,17 @@ exports.getCart = async (req, res)=>{
         res.status(500).json(err)
     }
 }
+
+
+//@desc .... get all cart details, accesible byv only admins.
+//@route ..... /cart/all
+
+exports.getAllcarts = async (req, res)=>{
+    try{
+        const carts = await cart.find();
+        res.status(200).json(cart);
+    }catch(err){
+        res.status(500).json(err);
+    }
+}
+ 
