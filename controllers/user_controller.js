@@ -125,8 +125,8 @@ exports.getUserInfo = async(req, res)=>{
     try{
 
         const user = await User.findById(req.params.id);
-        const { password:password, ...others } = user._doc;
-        console.log(...others);
+        const {password, ...others } = user._doc;
+        console.log({...others});
         res.status(200).json({...others});
 
     }catch(err){
