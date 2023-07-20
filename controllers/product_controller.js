@@ -1,5 +1,6 @@
 const Product = require('../models/product_model');
 
+var user_id;
 
 //@desc ..... create new procucts
 //@routes ...... /products/create

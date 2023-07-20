@@ -69,7 +69,7 @@ exports.loginUser = async (req, res)=>{
         res.status(200).json({...others, accessToken});
    
     }catch(e){ 
-        res.status(500).json(e)
+        res.status(500).json("err " +e);
     }
 }
 
