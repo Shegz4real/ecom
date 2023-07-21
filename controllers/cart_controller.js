@@ -18,7 +18,7 @@ exports.createCart = async (req, res)=>{
 }
 
 //@desc .....  update cart;
-//@route ..... /cart/update
+//@route ..... /cart/:Id
 
 exports.updateCart = async(req, res)=>{
     try{
@@ -36,7 +36,7 @@ exports.updateCart = async(req, res)=>{
     }
 }
 
-//@desc ..... delete your cart
+//@desc ..... delete your cart... uses cart id
 //@route ..... /cart/id
 
 exports.deleteCart = async (req, res)=>{
@@ -51,8 +51,8 @@ exports.deleteCart = async (req, res)=>{
     }
 }
 
-//@desc ..... get user cart
-//@route .... /cart
+//@desc ..... get user cart... uses user id
+//@route .... /cart/:userId
 
 exports.getCart = async (req, res)=>{
 
